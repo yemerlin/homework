@@ -1,10 +1,12 @@
-<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?php if (!defined('THINK_PATH')) exit();?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>ECSHOP 管理中心 - 添加新商品 </title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="/merlin/Public/Admin/Styles/general.css" rel="stylesheet" type="text/css" />
-<link href="/merlin/Public/Admin/Styles/main.css" rel="stylesheet" type="text/css" />
+    <title>ECSHOP 管理中心 - 添加新商品 </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="/merlin/Public/Admin/Styles/general.css" rel="stylesheet" type="text/css" />
+    <link href="/merlin/Public/Admin/Styles/main.css" rel="stylesheet" type="text/css" />
+    <link href="/merlin/Public/Admin/Styles/page.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <h1>
@@ -15,6 +17,7 @@
     <div style="clear:both"></div>
 </h1>
 
+
 <div class="tab-div">
     <div id="tabbar-div">
         <p>
@@ -22,7 +25,7 @@
         </p>
     </div>
     <div id="tabbody-div">
-        <form enctype="multipart/form-data" action="/merlin/index.php/admin/goods/add" method="post">
+        <form enctype="multipart/form-data" action="/merlin/index.php/Admin/Goods/add" method="post">
             <table width="90%" id="general-table" align="center">
                 <tr>
                     <td class="label">商品名称：</td>
@@ -69,8 +72,35 @@
     </div>
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div id="footer">
-共执行 9 个查询，用时 0.025161 秒，Gzip 已禁用，内存占用 3.258 MB<br />
-版权所有 &copy; 2005-2012 上海商派网络科技有限公司，并保留所有权利。</div>
+    共执行 9 个查询，用时 0.025161 秒，Gzip 已禁用，内存占用 3.258 MB<br />
+    版权所有 &copy; 2005-2012 上海商派网络科技有限公司，并保留所有权利。</div>
 </body>
 </html>

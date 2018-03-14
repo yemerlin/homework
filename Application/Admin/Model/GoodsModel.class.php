@@ -8,6 +8,7 @@
 namespace Admin\Model;
 use Think\Image;
 use Think\Model;
+use Think\Page;
 use Think\Upload;
 
 class GoodsModel extends Model
@@ -68,5 +69,76 @@ class GoodsModel extends Model
         $data['addtime']=time();
 
     }
+    protected function _before_update(&$data,$option){
+
+        if($_FILES['logo']['error']==0) {  //是否上传新图片
+            $oldlogo=$this->field('logo','s_logo','m_logo','l_logo','xl_logo')->find($data['id']);
+            unlink('./Public/Uploads/'.$oldlogo['logo']);                                //删除旧图
+            unlink('./Public/Uploads/'.$oldlogo['s_logo']);                                //删除旧图
+            unlink('./Public/Uploads/'.$oldlogo['m_logo']);                                //删除旧图
+            unlink('./Public/Uploads/'.$oldlogo['l_logo']);                                //删除旧图
+            unlink('./Public/Uploads/'.$oldlogo['xl_logo']);                                //删除旧图
+            $upload = new Upload();
+            $upload->rootPath = './Public/Uploads/';
+            $upload->savePath = 'Goods/';
+            $upload->exts = array('jpeg', 'png', 'jpg', 'gif');
+            $info = $upload->upload();
+            if(!$info){
+                $this->error=$upload->getError();
+                return false;
+            }else{
+                $data['logo']=$info['logo']['savepath'].$info['logo']['savename'];
+                $data['s_logo']=$info['logo']['savepath'].'s_'.$info['logo']['savename'];
+                $data['m_logo']=$info['logo']['savepath'].'m_'.$info['logo']['savename'];
+                $data['l_logo']=$info['logo']['savepath'].'l_'.$info['logo']['savename'];
+                $data['xl_logo']=$info['logo']['savepath'].'xl_'.$info['logo']['savename'];
+
+                $image=new Image();
+                $image->open('./Public/Uploads/'.$data['logo']);
+                $image->thumb(50,50)->save('./Public/Uploads/'.$data['s_logo']);
+                $image->thumb(130,130)->save('./Public/Uploads/'.$data['m_logo']);
+                $image->thumb(350,350)->save('./Public/Uploads/'.$data['l_logo']);
+                $image->thumb(700,700)->save('./Public/Uploads/'.$data['xl_logo']);
+            }
+        }
+    }
+    protected function _before_delete($option)
+    {
+        $id=$option['where']['id'];
+        $oldlogo=$this->field('logo','s_logo','m_logo','l_logo','xl_logo')->find($id);
+        unlink('./Public/Uploads/'.$oldlogo['logo']);
+        unlink('./Public/Uploads/'.$oldlogo['s_logo']);
+        unlink('./Public/Uploads/'.$oldlogo['m_logo']);
+        unlink('./Public/Uploads/'.$oldlogo['l_logo']);
+        unlink('./Public/Uploads/'.$oldlogo['xl_logo']);
+    }
+
+    public function showPage($keyword,$p_low,$p_high)
+    {
+        $list=array();
+        $where=array();
+        $count=$this->count();
+        if($keyword!=''){
+            $where['goods_name']=array('like',"%$keyword%");
+            $count=$this->where($where)->count();
+        }
+        if($p_low && $p_high){
+            $where['shop_price']=array('between',array($p_low,$p_high));
+            $count=$this->where($where)->count();
+        }elseif ($p_low){
+            $where['shop_price']=array('egt',$p_low);
+            $count=$this->where($where)->count();
+        }elseif ($p_high){
+            $where['shop_price']=array('elt',$p_high);
+            $count=$this->where($where)->count();
+        }
+
+
+        $page=new Page($count,2);
+        $list['show']=$page->show();
+        $list['data']=$this->where($where)->limit($page->firstRow,$page->listRows)->select();
+        return $list;
+    }
+
 
 }

@@ -1,0 +1,25 @@
+@charset "utf-8";
+.next{
+      margin: 2px;
+      padding: 2px;
+      border: 2px solid grey;
+}
+.num{
+    margin: 2px;
+    padding: 2px;
+    border: 2px solid grey;
+}
+.current{
+    margin: 2px;
+    padding: 2px;
+    border: 2px solid grey;
+    background: green;
+}
+.prev{
+    margin: 2px;
+    padding: 2px;
+    border: 2px solid grey;
+}
+
+
+</style>
