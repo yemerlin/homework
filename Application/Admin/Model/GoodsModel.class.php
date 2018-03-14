@@ -21,6 +21,7 @@ class GoodsModel extends Model
         'g_desc'        =>'goods_desc'
     );
     protected $insertFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale');
+    protected $updateFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale');
     protected $_validate=array(
         array('goods_name','require','商品名称必须填',1),
         array('shop_price','currency','本店价格必须是货币',1),

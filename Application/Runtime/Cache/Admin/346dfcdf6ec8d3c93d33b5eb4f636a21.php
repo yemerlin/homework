@@ -10,10 +10,10 @@
 </head>
 <body>
 <h1>
-    <span class="action-span"><a href="__GROUP__/Goods/goodsList">商品列表</a>
+    <span class="action-span"><a href="<?php echo U('list');?>">商品列表</a>
     </span>
-    <span class="action-span1"><a href="__GROUP__">ECSHOP 管理中心</a></span>
-    <span id="search_id" class="action-span1"> - 添加新商品 </span>
+    <span class="action-span1"><a href="<?php echo U('index/index');?>">ECSHOP 管理中心</a></span>
+    <span id="search_id" class="action-span1"><a href="<?php echo U('add');?>">&nbsp;添加新商品</a></span>
     <div style="clear:both"></div>
 </h1>
 
@@ -25,7 +25,7 @@
         </p>
     </div>
     <div id="tabbody-div">
-        <form enctype="multipart/form-data" action="/merlin/index.php/Admin/Goods/add" method="post">
+        <form enctype="multipart/form-data" action="/merlin/index.php/Admin/Goods/add.html" method="post">
             <table width="90%" id="general-table" align="center">
                 <tr>
                     <td class="label">商品名称：</td>

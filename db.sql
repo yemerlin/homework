@@ -18,3 +18,18 @@ CREATE table ye_goods
     KEY addtime(addtime),
     key is_on_sale(is_on_sale)
 )engine=InnoDB DEFAULT charset=utf8 comment '商品';
+
+
+DROP table if exists ye_brands;
+create table ye_brands
+(
+  brand_id mediumint unsigned not null auto_increment comment 'id',
+  brand_name VARCHAR(150) not null comment '品牌名称',
+  brand_logo VARCHAR(150) not null DEFAULT '' comment '品牌图标',
+  brand_url VARCHAR (150) not null DEFAULT '' comment '品牌网址',
+  primary key(brand_id)
+)engine=InnoDB DEFAULT charset=utf8 comment '品牌';
+
+ALTER table ye_goods add brand_id mediumint not null DEFAULT '' comment 'brand_id';
+
+

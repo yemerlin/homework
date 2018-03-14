@@ -6,13 +6,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="/merlin/Public/Admin/Styles/general.css" rel="stylesheet" type="text/css" />
     <link href="/merlin/Public/Admin/Styles/main.css" rel="stylesheet" type="text/css" />
+    <link href="/merlin/Public/Admin/Styles/page.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <h1>
-    <span class="action-span"><a href="__GROUP__/Goods/goodsList">商品列表</a>
+    <span class="action-span"><a href="<?php echo U('list');?>">商品列表</a>
     </span>
-    <span class="action-span1"><a href="__GROUP__">ECSHOP 管理中心</a></span>
-    <span id="search_id" class="action-span1"> - 添加新商品 </span>
+    <span class="action-span1"><a href="<?php echo U('index/index');?>">ECSHOP 管理中心</a></span>
+    <span id="search_id" class="action-span1"><a href="<?php echo U('add');?>">&nbsp;添加新商品</a></span>
     <div style="clear:both"></div>
 </h1>
 
