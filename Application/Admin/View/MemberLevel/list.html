@@ -10,28 +10,22 @@
     <div class="list-div" id="listDiv">
         <table cellpadding="3" cellspacing="1">
             <tr>
-                <th>品牌编号</th>
-                <th>品牌名称</th>
-                <th>品牌网址</th>
-                <th>品牌描述</th>
+                <th>等级编号</th>
+                <th>等级名称</th>
+                <th>积分下限</th>
+                <th>积分上限</th>
                 <th>操作</th>
             </tr>
             <foreach name="data" item="v">
             <tr>
-                <td class="first-cell" align="center">
-                    <span><{$v.brand_id}><a href="" target="_brank"><img style="float: right" src="__PUBLIC__/Uploads/<{$v['brand_logo']}>" width="16" height="16" border="0" /></a></span>
-                    <!--<span><img src="" </span>-->
-                </td>
 
-                <td align="center"><{$v.brand_name}></td>
+                <td align="center"><{$v.level_id}></td>
+                <td align="center"><{$v.level_name}></td>
+                <td align="center"><{$v.jifen_bottom}></td>
+                <td align="center"><{$v.jifen_top}></td>
                 <td align="center">
-                    <a href="<{$v.brand_url}>" target="_brank"><{$v.brand_url}></a>
-                </td>
-                <td align="center"><img src="" /><{$v.brand_desc}></td>
-
-                <td align="center">
-                <a href="<{:U('edit?brand_id='.$v['brand_id'])}>" title="编辑">编辑</a> |
-                <a href="<{:U('delete?brand_id='.$v['brand_id'])}>" title="编辑" onclick="return confirm('确认删除？')">移除</a>
+                <a href="<{:U('edit?level_id='.$v['level_id'])}>" title="编辑">编辑</a> |
+                <a href="<{:U('delete?level_id='.$v['level_id'])}>" title="编辑" onclick="return confirm('确认删除？')">移除</a>
                 </td>
             </tr>
             </foreach>

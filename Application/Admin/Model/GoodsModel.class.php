@@ -13,15 +13,15 @@ use Think\Upload;
 
 class GoodsModel extends Model
 {
- protected $_map=array(
+    protected $_map=array(
         'g_name'        =>'goods_name',
         'gs_price'      =>'shop_price',
         'gm_price'      =>'market_price',
         'gis_on_sale'   =>'is_on_sale',
         'g_desc'        =>'goods_desc'
     );
-    protected $insertFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale');
-    protected $updateFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale');
+    protected $insertFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale','brand_id');
+    protected $updateFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale','brand_id');
     protected $_validate=array(
         array('goods_name','require','商品名称必须填',1),
         array('shop_price','currency','本店价格必须是货币',1),
@@ -30,7 +30,6 @@ class GoodsModel extends Model
 
     protected function _before_insert(&$data,$option)
     {
-
         if($_FILES['logo']['error']==0){
             $upload=new Upload();
             $upload->maxSize=0;  //10M
@@ -70,10 +69,25 @@ class GoodsModel extends Model
         $data['addtime']=time();
 
     }
-    protected function _before_update(&$data,$option){
+    protected function _after_insert($data,$option)
+    {
+        $mb=I('post.member_price');
+        $model=D('MemberPrice');
+        foreach ($mb as $k=>$v){
+            if($v>0){
+                $model->add(array(
+                    'goods_id'      => $data['id'],
+                    'level_id'      => $k,
+                    'member_price'  => $v
+                ));
+            }
+        }
+    }
+    protected function _before_update(&$data,$option)
+    {
 
         if($_FILES['logo']['error']==0) {  //是否上传新图片
-            $oldlogo=$this->field('logo','s_logo','m_logo','l_logo','xl_logo')->find($data['id']);
+            $oldlogo=$this->field('logo,s_logo,m_logo,l_logo,xl_logo')->find($data['id']);
             unlink('./Public/Uploads/'.$oldlogo['logo']);                                //删除旧图
             unlink('./Public/Uploads/'.$oldlogo['s_logo']);                                //删除旧图
             unlink('./Public/Uploads/'.$oldlogo['m_logo']);                                //删除旧图
@@ -88,6 +102,7 @@ class GoodsModel extends Model
                 $this->error=$upload->getError();
                 return false;
             }else{
+
                 $data['logo']=$info['logo']['savepath'].$info['logo']['savename'];
                 $data['s_logo']=$info['logo']['savepath'].'s_'.$info['logo']['savename'];
                 $data['m_logo']=$info['logo']['savepath'].'m_'.$info['logo']['savename'];
@@ -102,16 +117,38 @@ class GoodsModel extends Model
                 $image->thumb(700,700)->save('./Public/Uploads/'.$data['xl_logo']);
             }
         }
+        $id=$option['where']['id'];
+        $list=I('post.member_price');
+        $model=D('MemberPrice');
+        $model->where("goods_id=$id")->delete();
+        foreach ($list as $k=>$v){
+            if($v>0){
+                $model->add(array(
+                    'goods_id'      => $id,
+                    'level_id'      => $k,
+                    'member_price'  => $v
+                ));
+            }
+        }
     }
+
+
     protected function _before_delete($option)
     {
         $id=$option['where']['id'];
-        $oldlogo=$this->field('logo','s_logo','m_logo','l_logo','xl_logo')->find($id);
+        $oldlogo=$this->field('logo,s_logo,m_logo,l_logo,xl_logo')->find($id);
         unlink('./Public/Uploads/'.$oldlogo['logo']);
         unlink('./Public/Uploads/'.$oldlogo['s_logo']);
         unlink('./Public/Uploads/'.$oldlogo['m_logo']);
         unlink('./Public/Uploads/'.$oldlogo['l_logo']);
         unlink('./Public/Uploads/'.$oldlogo['xl_logo']);
+
+        $model=D('MemberPrice');
+        $model->where("goods_id=$id")->delete();
+    }
+    protected function _after_update($data,$option)
+    {
+
     }
 
     public function showPage($keyword,$p_low,$p_high)
@@ -135,9 +172,9 @@ class GoodsModel extends Model
         }
 
 
-        $page=new Page($count,2);
+        $page=new Page($count,5);
         $list['show']=$page->show();
-        $list['data']=$this->where($where)->limit($page->firstRow,$page->listRows)->select();
+        $list['data']=$this->field('g.*,b.brand_name')->alias('g')->join('left join ye_brands b on g.brand_id=b.brand_id')->where($where)->limit($page->firstRow,$page->listRows)->select();
         return $list;
     }
 

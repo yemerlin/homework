@@ -30,6 +30,22 @@ create table ye_brands
   primary key(brand_id)
 )engine=InnoDB DEFAULT charset=utf8 comment '品牌';
 
-ALTER table ye_goods add brand_id mediumint not null DEFAULT '' comment 'brand_id';
+create table ye_member_level
+(
+	level_id mediumint unsigned not null auto_increment comment 'id',
+	level_name varchar(30) not null comment '级别名称',
+	jifen_bottom mediumint unsigned not null comment '积分下限',
+	jifen_top mediumint unsigned not null comment '积分上限',
+	primary key (level_id)
+)engine=InnoDB default charset=utf8 comment '会员级别';
+
+create table ye_member_price
+(
+	member_price decimal(10,2) not null comment '会员价格',
+	level_id mediumint unsigned not null comment '级别Id',
+	goods_id mediumint unsigned not null comment '商品Id',
+	key level_id(level_id),
+	key goods_id(goods_id)
+)engine=InnoDB default charset=utf8 comment '会员价格';
 
 

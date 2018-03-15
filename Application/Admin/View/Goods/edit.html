@@ -3,17 +3,32 @@
 <div class="tab-div">
     <div id="tabbar-div">
         <p>
-            <span class="tab-front" id="general-tab">通用信息</span>
+            <span class="tab-front">通用信息</span>
+            <span class="tab-back" >会员价格</span>
+            <span class="tab-back" >商品描述</span>
+            <span class="tab-back" >商品属性</span>
+            <span class="tab-back" >商品相册</span>
         </p>
     </div>
     <div id="tabbody-div">
         <form enctype="multipart/form-data" action="__SELF__" method="post">
         	<input type="hidden" name="id" value="<?php echo $data['id']; ?>" />
-            <table width="90%" id="general-table" align="center">
+            <table width="90%" class="tab_table" align="center">
                 <tr>
                     <td class="label">商品名称：</td>
                     <td><input type="text" name="goods_name" size="60" value="<{$data['goods_name']}>" />
                     <span class="require-field">*</span></td>
+                </tr>
+                <tr>
+                    <td class="label">品牌名称：</td>
+                    <td>
+                        <select name="brand_id">
+                                <option value="">请选择</option>
+                            <foreach name="list" item="v">
+                                <option value="<{$v.brand_id}>" <if condition="$data['brand_id'] eq $v['brand_id']"> selected=selected</if> ><{$v.brand_name}></option>
+                            </foreach>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                         <img src="__PUBLIC__/Uploads/<{$data['m_logo']}>"/>
@@ -24,14 +39,14 @@
                 <tr>
                     <td class="label">市场售价：</td>
                     <td>
-                        <input type="text" name="market_price" value="<{$data['market_price']}>" size="20" />
+                        <input type="text" name="market_price" value="<{$data['market_price']}>" size="18" />
                         <span class="require-field">*</span>
                     </td>
                 </tr>
                 <tr>
                     <td class="label">本店售价：</td>
                     <td>
-                        <input type="text" name="shop_price" value="<{$data['shop_price']}>" size="20"/>
+                        <input type="text" name="shop_price" value="<{$data['shop_price']}>" size="18"/>
                         <span class="require-field">*</span>
                     </td>
                 </tr>
@@ -42,12 +57,30 @@
                         <input type="radio" name="is_on_sale" value="否" <if condition="$data['is_on_sale']=='否'"> checked=checked</if> /> 否
                     </td>
                 </tr>
+            </table>
+            <table width="90%" class="tab_table" align="center" style="display: none;">
+                <foreach name="m_list" item="v" key="k">
+                <tr>
+                    <td class="label"><{$v.level_name}>：￥</td>
+                    <td>
+                        <input type="text" name="member_price[<{$v.level_id}>]"   value="<{$mp_data[$v['level_id']]}>" size="15"/>
+                    </td>
+                </tr>
+                </foreach>
+            </table>
+            <table width="90%" class="tab_table" align="center" style="display: none;">
                 <tr>
                     <td class="label">商品描述：</td>
                     <td>
                         <textarea id="goods_desc" name="goods_desc"><{$data['goods_desc']}></textarea>
                     </td>
                 </tr>
+            </table>
+            <table width="90%" class="tab_table" align="center" style="display: none;">
+                <tr><td>商品属性</td></tr>
+            </table>
+            <table width="90%" class="tab_table" align="center" style="display: none;">
+                <tr><td>商品相册</td></tr>
             </table>
             <div class="button-div">
                 <input type="hidden" name="id" value="<{$data['id']}>" size="20"/>
@@ -57,6 +90,14 @@
         </form>
     </div>
 </div>
+<script type="text/javascript">
+    $("#tabbar-div p span").click(function(){
+        var i=$(this).index();
+        $(".tab-front").removeClass("tab-front").addClass("tab-back");
+        $(this).removeClass("tab-back").addClass("tab-front");
+        $(".tab_table").hide().eq(i).show();
+    })
+</script>
 
 
 
