@@ -66,22 +66,21 @@ class GoodsController extends Controller
             $b_model=D('Brands');
             $ml_model=D('MemberLevel');
             $mp_model=D('MemberPrice');
+            $gp_model=D('GoodsPic');
             $list=$b_model->field('brand_id,brand_name')->select();
             $ml_list=$ml_model->field('level_id,level_name')->select();
             $mp_list=$mp_model->where("goods_id=$id")->select();
+            $gp_list=$gp_model->field('pic_id,m_pic')->where("goods_id=$id")->select();
             foreach ($mp_list as $k=>$v){
                 $mp_data[$v['level_id']]=$v['member_price'];
             }
-//            dump($data);
-//            dump($mp_list);
-//            dump($mp_data);
-//            die();
             $this->assign(
                 array(
                     'data'=>$data,
                     'list'=>$list,
                     'm_list'=>$ml_list,
-                    'mp_data'=>$mp_data
+                    'mp_data'=>$mp_data,
+                    'gp_list'=>$gp_list
                 ));
         }
         if(IS_POST){
@@ -111,5 +110,16 @@ class GoodsController extends Controller
                 $this->error($model->getError(),U('list'));
             }
         }
+    }
+    public function ajaxDelete()
+    {
+        $pic_id=I('get.pic_id');
+        $gp_model=D('GoodsPic');
+        $oldpic=$gp_model->field('pic,s_pic,m_pic,l_pic')->find($pic_id);
+        unlink('./Public/Uploads/'.$oldpic['pic']);
+        unlink('./Public/Uploads/'.$oldpic['s_pic']);
+        unlink('./Public/Uploads/'.$oldpic['m_pic']);
+        unlink('./Public/Uploads/'.$oldpic['l_pic']);
+        $gp_model->delete($pic_id);
     }
 }

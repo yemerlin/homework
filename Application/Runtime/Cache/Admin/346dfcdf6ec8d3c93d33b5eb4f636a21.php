@@ -91,7 +91,10 @@
                 <tr><td>商品属性</td></tr>
             </table>
             <table width="90%" class="tab_table" align="center" style="display: none;">
-                <tr><td>商品相册</td></tr>
+                <tr><td>
+                    <input id="p_btn" type="button" value="添加图片" />
+                    <ul id="p_ul"></ul>
+                </td></tr>
             </table>
             <div class="button-div">
                 <input type="submit" value=" 确定 " class="button"/>
@@ -106,6 +109,10 @@
         $(".tab-front").removeClass("tab-front").addClass("tab-back");
         $(this).removeClass("tab-back").addClass("tab-front");
         $(".tab_table").hide().eq(i).show();
+    })
+    $("#p_btn").click(function(){
+        var file="<li><input type='file' name='pic[]'/></li>";
+        $("#p_ul").append(file);
     })
 </script>
 

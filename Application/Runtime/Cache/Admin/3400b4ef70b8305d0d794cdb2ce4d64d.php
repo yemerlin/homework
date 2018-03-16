@@ -7,6 +7,7 @@
     <link href="/merlin/Public/Admin/Styles/general.css" rel="stylesheet" type="text/css" />
     <link href="/merlin/Public/Admin/Styles/main.css" rel="stylesheet" type="text/css" />
     <link href="/merlin/Public/Admin/Styles/page.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/merlin/Public/Admin/Js/jquery-3.1.1.min.js"></script>
 </head>
 <body>
 <h1>

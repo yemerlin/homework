@@ -55,7 +55,7 @@ class BrandsController extends Controller
             $this->assign('data',$data);
         }
         if(IS_POST){
-            if($model->save(I('post.'))){
+            if(false!==$model->save(I('post.'))){
                 $this->success('修改成功',U('list'));
             }else{
                 $this->error($model->getError(),U('list'));

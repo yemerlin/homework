@@ -71,7 +71,7 @@ class GoodsModel extends Model
     }
     protected function _after_insert($data,$option)
     {
-        $mb=I('post.member_price');
+        $mb=I('post.member_price');    //处理会员价格
         $model=D('MemberPrice');
         foreach ($mb as $k=>$v){
             if($v>0){
@@ -80,6 +80,53 @@ class GoodsModel extends Model
                     'level_id'      => $k,
                     'member_price'  => $v
                 ));
+            }
+        }
+        //处理商品相册
+        if(isset($_FILES['pic'])){
+            $p_model=D('GoodsPic');
+            $pics=array();
+            $i=0;
+            foreach ($_FILES['pic']['name'] as $key=>$val) { //处理三维数组
+                $pics[$i]['name']=$val;
+                $pics[$i]['type']=$_FILES['pic']['type'][$key];
+                $pics[$i]['tmp_name']=$_FILES['pic']['tmp_name'][$key];
+                $pics[$i]['error']=$_FILES['pic']['error'][$key];
+                $pics[$i]['size']=$_FILES['pic']['size'][$key];
+                $i++;
+            }
+            foreach ($pics as $k=>$file){
+                if($file['error']==0){
+                    $upload=new Upload();
+                    $upload->maxSize=0;  //10M
+                    $upload->exts=array('jpeg','gif','png','jpg');
+                    $upload->rootPath='./Public/Uploads/';
+                    $upload->savePath='Goods/';
+                    $info=$upload->uploadOne($file);
+                    if(!$info){
+                        $this->error=$upload->getError();
+                        return false;
+                    }else{
+                        $pic=$info['savepath'].$info['savename'];
+                        $s_pic=$info['savepath'].'s_'.$info['savename'];
+                        $m_pic=$info['savepath'].'m_'.$info['savename'];
+                        $l_pic=$info['savepath'].'l_'.$info['savename'];
+                        $image=new Image();
+                        $image->open('./Public/Uploads/'.$pic);
+                        $image->thumb(650,650)->save('./Public/Uploads/'.$l_pic);
+                        $image->thumb(350,350)->save('./Public/Uploads/'.$m_pic);
+                        $image->thumb(50,50)->save('./Public/Uploads/'.$s_pic);
+                        $p_model->add(
+                            array(
+                                "goods_id"  =>$data['id'],
+                                "pic"       =>$pic,
+                                "s_pic"     =>$s_pic,
+                                "m_pic"     =>$m_pic,
+                                "l_pic"     =>$l_pic
+                            )
+                        );
+                    }
+                }
             }
         }
     }
@@ -143,11 +190,69 @@ class GoodsModel extends Model
         unlink('./Public/Uploads/'.$oldlogo['l_logo']);
         unlink('./Public/Uploads/'.$oldlogo['xl_logo']);
 
-        $model=D('MemberPrice');
-        $model->where("goods_id=$id")->delete();
+        $mp_model=D('MemberPrice');
+        $mp_model->where("goods_id=$id")->delete();
+        $gp_model=D('GoodsPic');
+        $oldpic=$gp_model->where("goods_id=$id")->field('pic,s_pic,m_pic,l_pic')->select();
+        foreach ($oldpic as $v) {
+            unlink('./Public/Uploads/' . $v['pic']);
+            unlink('./Public/Uploads/' . $v['s_pic']);
+            unlink('./Public/Uploads/' . $v['m_pic']);
+            unlink('./Public/Uploads/' . $v['l_pic']);
+        }
+        $gp_model->where("goods_id=$id")->delete();
+
     }
     protected function _after_update($data,$option)
     {
+        if($_FILES['pic']){
+            $pics=array();
+            $i=0;
+            foreach ($_FILES['pic']['name'] as $k=>$v){
+                $pics[$i]['name']=$v;
+                $pics[$i]['type']=$_FILES['pic']['type'][$k];
+                $pics[$i]['tmp_name']=$_FILES['pic']['tmp_name'][$k];
+                $pics[$i]['error']=$_FILES['pic']['error'][$k];
+                $pics[$i]['size']=$_FILES['pic']['size'][$k];
+                $i++;
+            }
+            foreach ($pics as $k=>$file){
+                if($file['error']==0){
+                    $upload=new Upload();
+                    $upload->maxSize=0;  //10M
+                    $upload->exts=array('jpeg','gif','png','jpg');
+                    $upload->rootPath='./Public/Uploads/';
+                    $upload->savePath='Goods/';
+                    $info=$upload->uploadOne($file);
+
+                    if(!$info){
+                        $this->error=$upload->getError();
+                        return false;
+                    }else{
+                        $pic=$info['savepath'].$info['savename'];
+                        $s_pic=$info['savepath'].'s_'.$info['savename'];
+                        $m_pic=$info['savepath'].'m_'.$info['savename'];
+                        $l_pic=$info['savepath'].'l_'.$info['savename'];
+                        $image=new Image();
+                        $image->open('./Public/Uploads/'.$pic);
+                        $image->thumb(650,650)->save('./Public/Uploads/'.$l_pic);
+                        $image->thumb(650,650)->save('./Public/Uploads/'.$m_pic);
+                        $image->thumb(650,650)->save('./Public/Uploads/'.$s_pic);
+                        $gp_model=D('GoodsPic');
+                        $gp_model->add(
+                            array(
+                                "goods_id"  =>$data['id'],
+                                "pic"       =>$pic,
+                                "s_pic"     =>$s_pic,
+                                "m_pic"     =>$m_pic,
+                                "l_pic"     =>$l_pic
+                            )
+                        );
+
+                    }
+                }
+            }
+        }
 
     }
 

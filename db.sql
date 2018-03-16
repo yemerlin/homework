@@ -49,3 +49,16 @@ create table ye_member_price
 )engine=InnoDB default charset=utf8 comment '会员价格';
 
 
+create table ye_goods_pic
+(
+  pic_id mediumint unsigned not null auto_increment comment 'ID',
+  goods_id mediumint unsigned not null  comment '商品id',
+  pic VARCHAR(150) not null DEFAULT '' comment '原图',
+  s_pic VARCHAR(150) not null DEFAULT '' comment '小图',
+  m_pic VARCHAR(150) not null DEFAULT '' comment '中图',
+  l_pic VARCHAR(150) not null DEFAULT '' comment '大图',
+  primary KEY (pic_id),
+  KEY goods_id(goods_id)
+)engine=InnoDB DEFAULT charset=utf8 comment '商品相册';
+
+

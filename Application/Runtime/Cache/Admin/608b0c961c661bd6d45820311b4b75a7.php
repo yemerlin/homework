@@ -19,7 +19,19 @@
 </h1>
 
 
-
+<style>
+    #old_pic li{
+        list-style: none;
+        float: left;
+        margin: 45px;
+        width: 200px;
+        height: 200px;
+    }
+    #old_pic li img{
+        width: 180px;
+        height: 180px;
+    }
+</style>
 <div class="tab-div">
     <div id="tabbar-div">
         <p>
@@ -31,7 +43,7 @@
         </p>
     </div>
     <div id="tabbody-div">
-        <form enctype="multipart/form-data" action="/merlin/index.php/Admin/Goods/edit/id/21.html" method="post">
+        <form enctype="multipart/form-data" action="/merlin/index.php/Admin/Goods/edit/id/1.html" method="post">
         	<input type="hidden" name="id" value="<?php echo $data['id']; ?>" />
             <table width="90%" class="tab_table" align="center">
                 <tr>
@@ -49,8 +61,8 @@
                     </td>
                 </tr>
                 <tr>
-                        <img src="/merlin/Public/Uploads/<?php echo ($data['m_logo']); ?>"/>
-                    <td class="label">LOGO：</td>
+
+                    <td class="label">LOGO： <img src="/merlin/Public/Uploads/<?php echo ($data['m_logo']); ?>"/></td>
                     <td>
                     <input type="file" name="logo" size="60" /></td>
                 </tr>
@@ -96,7 +108,16 @@
                 <tr><td>商品属性</td></tr>
             </table>
             <table width="90%" class="tab_table" align="center" style="display: none;">
-                <tr><td>商品相册</td></tr>
+                <tr><td>
+                    <input id="i_pic_bt" type="button" value="添加图片"/>
+                    <ul id="new_pic"></ul>
+                    <ul id="old_pic">
+                        <?php if(is_array($gp_list)): foreach($gp_list as $key=>$v): ?><li>
+                                <input class="del_pic_bt" type="button" pic_id="<?php echo ($v['pic_id']); ?>" value="删除"/>
+                                <img src="/merlin/Public/Uploads/<?php echo ($v['m_pic']); ?>"/>
+                            </li><?php endforeach; endif; ?>
+                    </ul>
+                </td></tr>
             </table>
             <div class="button-div">
                 <input type="hidden" name="id" value="<?php echo ($data['id']); ?>" size="20"/>
@@ -112,6 +133,26 @@
         $(".tab-front").removeClass("tab-front").addClass("tab-back");
         $(this).removeClass("tab-back").addClass("tab-front");
         $(".tab_table").hide().eq(i).show();
+    });
+
+    $("#i_pic_bt").click(function () {
+        var i="<li><input type='file' name='pic[]'></li>";
+        $("#new_pic").append(i);
+    });
+
+
+    $(".del_pic_bt").click(function(){
+        var pic_id=$(this).attr('pic_id');
+        var url="<?php echo U('ajaxDelete','',false);?>/pic_id/"+pic_id;
+        var li=$(this).parent();
+        if(confirm("你确认删除该图片?")){
+            $.ajax({
+                url: url,
+                success:function(){
+                  li.remove();
+                }
+            })
+        }
     })
 </script>
 
