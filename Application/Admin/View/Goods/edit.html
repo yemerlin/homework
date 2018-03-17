@@ -32,6 +32,17 @@
                     <span class="require-field">*</span></td>
                 </tr>
                 <tr>
+                    <td class="label">主分类：</td>
+                    <td>
+                        <select name="cat_id">
+                            <option value="0">请选择</option>
+                            <foreach name="cats" item="v">
+                                <option value="<{$v.cat_id}>" <if condition="$data['cat_id'] eq $v['cat_id']"> selected=selected</if> ><{:str_repeat('-',4*$v['level'])}><{$v.cat_name}></option>
+                            </foreach>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td class="label">品牌名称：</td>
                     <td>
                         <select name="brand_id">

@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>ECSHOP 管理中心 - <?php echo ($title_name); ?> </title>
+    <title>ECSHOP 管理中心- <?php echo ($title_name); ?> </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="/merlin/Public/Admin/Styles/general.css" rel="stylesheet" type="text/css" />
     <link href="/merlin/Public/Admin/Styles/main.css" rel="stylesheet" type="text/css" />
@@ -13,9 +13,9 @@
 <h1>
     <span class="action-span"><a href="<?php echo U('list');?>"><?php echo ($list_name); ?></a>
     </span>
-    <span class="action-span1"><a href="<?php echo U('Index/index');?>">ECSHOP 管理中心</a></span>
-    <span id="search_id" class="action-span1"><a href="<?php echo U('add');?>">&nbsp;<?php echo ($add_name); ?></a></span>
-    <div style="clear:both"></div>
+    <span class="action-span1"><a href="<?php echo U('Index/index');?>">ECSHOP 管理中心&nbsp;</a></span>
+    <span id="search_id" class="action-span1" style="border: 1px solid red;background: yellowgreen"><a href="<?php echo U('add');?>">&nbsp;<?php echo ($add_name); ?></a></span>
+    <div style="clear:both"><?php echo ($title_name); ?></div>
 </h1>
 
 
@@ -38,6 +38,15 @@
                     <span class="require-field">*</span></td>
                 </tr>
                 <tr>
+                    <td class="label">主分类：</td>
+                    <td>
+                        <select  name="cat_id">
+                            <option value="0">请选择</option>
+                            <?php if(is_array($cats)): foreach($cats as $key=>$v): ?><option value="<?php echo ($v["cat_id"]); ?>"><?php echo str_repeat('-',4*$v['level']); echo ($v["cat_name"]); ?></option><?php endforeach; endif; ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td class="label">品牌名称：</td>
                     <td>
                         <select  name="brand_id">
@@ -45,7 +54,6 @@
                             <?php if(is_array($data)): foreach($data as $key=>$v): ?><option value="<?php echo ($v["brand_id"]); ?>"><?php echo ($v["brand_name"]); ?></option><?php endforeach; endif; ?>
                         </select>
                     </td>
-
                 </tr>
                 <tr>
                     <td class="label">LOGO：</td>

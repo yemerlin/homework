@@ -20,12 +20,12 @@ class GoodsModel extends Model
         'gis_on_sale'   =>'is_on_sale',
         'g_desc'        =>'goods_desc'
     );
-    protected $insertFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale','brand_id');
-    protected $updateFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale','brand_id');
+    protected $insertFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale','brand_id','cat_id');
+    protected $updateFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale','brand_id','cat_id');
     protected $_validate=array(
         array('goods_name','require','商品名称必须填',1),
         array('shop_price','currency','本店价格必须是货币',1),
-        array('market_price','currency','市场价格必须是货币',1)
+        array('market_price','currency','市场价格必须是货币',1),
     );
 
     protected function _before_insert(&$data,$option)
@@ -279,7 +279,7 @@ class GoodsModel extends Model
 
         $page=new Page($count,5);
         $list['show']=$page->show();
-        $list['data']=$this->field('g.*,b.brand_name')->alias('g')->join('left join ye_brands b on g.brand_id=b.brand_id')->where($where)->limit($page->firstRow,$page->listRows)->select();
+        $list['data']=$this->field('g.*,b.brand_name,c.cat_name')->alias('g')->join('left join ye_brands b on g.brand_id=b.brand_id left join ye_category c on g.cat_id=c.cat_id')->where($where)->limit($page->firstRow,$page->listRows)->select();
         return $list;
     }
 

@@ -1,0 +1,36 @@
+<layout name="layout"/>
+<div class="form-div">
+    <form action="" name="searchForm">
+    <img src="__PUBLIC__/Admin/Images/icon_search.gif" width="26" height="22" border="0" alt="search" />
+    <input type="text" name="brand_name" size="15" />
+    <input type="submit" value=" 搜索 " class="button" />
+    </form>
+</div>
+<form method="post" action="" name="listForm">
+    <div class="list-div" id="listDiv">
+        <table cellpadding="3" cellspacing="1">
+            <tr>
+                <th>分类名称</th>
+                <th>操作</th>
+            </tr>
+            <foreach name="cats" item="v">
+            <tr>
+
+                <td><{:str_repeat('-',8*$v['level'])}><{$v.cat_name}></td>
+
+                <td align="center">
+                <a href="<{:U('edit?cat_id='.$v['cat_id'])}>" title="编辑">编辑</a> |
+                <a href="<{:U('delete?cat_id='.$v['cat_id'])}>" title="编辑" onclick="return confirm('确认删除？')">移除</a>
+                </td>
+            </tr>
+            </foreach>
+            <table id="page-table" cellspacing="0">
+                <tr>
+                    <td width="80%">&nbsp;</td>
+                    <td align="center" nowrap="true">
+                        <{$show}>
+                    </td>
+                </tr>
+            </table>
+    </div>
+</form>

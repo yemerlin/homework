@@ -33,12 +33,16 @@ class GoodsController extends Controller
         $level=$m_l_model->field('level_id,level_name')->select();
         $b_model=D('Brands');
         $data=$b_model->field('brand_id,brand_name')->select();
+        $c_model=D('Category');
+        $c_list=$c_model->select();
+        $cats=$c_model->getCategory($c_list,0,0,true);
         $this->assign(array(
             'list_name' =>  '商品列表',
             'add_name'  =>  '添加新商品',
             'title_name'=>  '添加商品',
             'data'      =>  $data,
-            'level'     =>  $level
+            'level'     =>  $level,
+            'cats'      =>  $cats
         ));
         $this->display();
     }
@@ -67,10 +71,13 @@ class GoodsController extends Controller
             $ml_model=D('MemberLevel');
             $mp_model=D('MemberPrice');
             $gp_model=D('GoodsPic');
+            $c_model=D('Category');
             $list=$b_model->field('brand_id,brand_name')->select();
             $ml_list=$ml_model->field('level_id,level_name')->select();
             $mp_list=$mp_model->where("goods_id=$id")->select();
             $gp_list=$gp_model->field('pic_id,m_pic')->where("goods_id=$id")->select();
+            $c_list=$c_model->select();
+            $cats=$c_model->getCategory($c_list,0,0,true);
             foreach ($mp_list as $k=>$v){
                 $mp_data[$v['level_id']]=$v['member_price'];
             }
@@ -80,7 +87,8 @@ class GoodsController extends Controller
                     'list'=>$list,
                     'm_list'=>$ml_list,
                     'mp_data'=>$mp_data,
-                    'gp_list'=>$gp_list
+                    'gp_list'=>$gp_list,
+                    'cats'  =>$cats
                 ));
         }
         if(IS_POST){

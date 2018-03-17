@@ -30,27 +30,16 @@
     <div class="list-div" id="listDiv">
         <table cellpadding="3" cellspacing="1">
             <tr>
-                <th>品牌编号</th>
-                <th>品牌名称</th>
-                <th>品牌网址</th>
-                <th>品牌描述</th>
+                <th>分类名称</th>
                 <th>操作</th>
             </tr>
-            <?php if(is_array($data)): foreach($data as $key=>$v): ?><tr>
-                <td class="first-cell" align="center">
-                    <span><?php echo ($v["brand_id"]); ?><a href="" target="_brank"><img style="float: right" src="/merlin/Public/Uploads/<?php echo ($v['brand_logo']); ?>" width="16" height="16" border="0" /></a></span>
-                    <!--<span><img src="" </span>-->
-                </td>
+            <?php if(is_array($cats)): foreach($cats as $key=>$v): ?><tr>
 
-                <td align="center"><?php echo ($v["brand_name"]); ?></td>
-                <td align="center">
-                    <a href="<?php echo ($v["brand_url"]); ?>" target="_brank"><?php echo ($v["brand_url"]); ?></a>
-                </td>
-                <td align="center"><img src="" /><?php echo ($v["brand_desc"]); ?></td>
+                <td><?php echo str_repeat('-',8*$v['level']); echo ($v["cat_name"]); ?></td>
 
                 <td align="center">
-                <a href="<?php echo U('edit?brand_id='.$v['brand_id']);?>" title="编辑">编辑</a> |
-                <a href="<?php echo U('delete?brand_id='.$v['brand_id']);?>" title="编辑" onclick="return confirm('确认删除？')">移除</a>
+                <a href="<?php echo U('edit?cat_id='.$v['cat_id']);?>" title="编辑">编辑</a> |
+                <a href="<?php echo U('delete?cat_id='.$v['cat_id']);?>" title="编辑" onclick="return confirm('确认删除？')">移除</a>
                 </td>
             </tr><?php endforeach; endif; ?>
             <table id="page-table" cellspacing="0">
