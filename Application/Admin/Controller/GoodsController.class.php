@@ -72,12 +72,15 @@ class GoodsController extends Controller
             $mp_model=D('MemberPrice');
             $gp_model=D('GoodsPic');
             $c_model=D('Category');
+            $gc_model=D('GoodsCat');
             $list=$b_model->field('brand_id,brand_name')->select();
             $ml_list=$ml_model->field('level_id,level_name')->select();
             $mp_list=$mp_model->where("goods_id=$id")->select();
             $gp_list=$gp_model->field('pic_id,m_pic')->where("goods_id=$id")->select();
             $c_list=$c_model->select();
             $cats=$c_model->getCategory($c_list,0,0,true);
+            $gc_list=$gc_model->field('cat_id')->where("goods_id=$id")->select();
+
             foreach ($mp_list as $k=>$v){
                 $mp_data[$v['level_id']]=$v['member_price'];
             }
@@ -88,7 +91,8 @@ class GoodsController extends Controller
                     'm_list'=>$ml_list,
                     'mp_data'=>$mp_data,
                     'gp_list'=>$gp_list,
-                    'cats'  =>$cats
+                    'cats'  =>$cats,
+                    'gc_list'=>$gc_list
                 ));
         }
         if(IS_POST){

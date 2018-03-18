@@ -94,3 +94,14 @@ INSERT INTO `ye_category` (`cat_id`, `cat_name`, `parent_id`) VALUES
 (20, '五金家装', 1),
 (22, '冰箱', 16);
 
+
+CREATE TABLE ye_goods_cat
+(
+  gc_id mediumint unsigned not null auto_increment comment "ID",
+  goods_id mediumint unsigned not null comment "商品id",
+  cat_id mediumint unsigned not null comment "分类id",
+  PRIMARY KEY (gc_id),
+  key goods_id(goods_id),
+  key cat_id(cat_id)
+)engine=InnoDB DEFAULT charset=utf8 comment "商品-扩展分类";
+

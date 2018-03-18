@@ -43,6 +43,34 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="label">扩展分类：<input type="button" id="e_cat_bt" value="添加扩展"/></td>
+                    <td>
+                        <ul id="e_cat_name">
+                            <if condition="$gc_list">
+                            <foreach name="gc_list" item="gc">
+                            <li style="float: left;list-style: none;margin:2px">
+                                <select  name="e_cat_id[]" >
+                                    <option value="0">请选择</option>
+                                    <foreach name="cats" item="v">
+                                        <option value="<{$v.cat_id}>" <if condition="$v['cat_id'] eq $gc['cat_id']">selected=selected</if> > <{:str_repeat('-',4*$v['level'])}> <{$v.cat_name}></option>
+                                    </foreach>
+                                </select>
+                            </li>
+                            </foreach>
+                                <else />
+                                <li style="float: left;list-style: none;margin:2px">
+                                    <select  name="e_cat_id[]" >
+                                        <option value="0">请选择</option>
+                                        <foreach name="cats" item="v">
+                                            <option value="<{$v.cat_id}>"><{:str_repeat('-',4*$v['level'])}> <{$v.cat_name}></option>
+                                        </foreach>
+                                    </select>
+                                </li>
+                            </if>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
                     <td class="label">品牌名称：</td>
                     <td>
                         <select name="brand_id">
@@ -150,6 +178,12 @@
                 }
             })
         }
+    })
+
+    $("#e_cat_bt").click(function () {
+        var i=$('#e_cat_name').find('li').eq(0).clone();
+        $(i).eq(0).find("option").eq(0).attr('selected','selected');
+        $('#e_cat_name').append(i);
     })
 </script>
 

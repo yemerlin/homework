@@ -43,7 +43,7 @@
         </p>
     </div>
     <div id="tabbody-div">
-        <form enctype="multipart/form-data" action="/merlin/index.php/Admin/Goods/edit/id/47.html" method="post">
+        <form enctype="multipart/form-data" action="/merlin/index.php/Admin/Goods/edit/id/51.html" method="post">
         	<input type="hidden" name="id" value="<?php echo $data['id']; ?>" />
             <table width="90%" class="tab_table" align="center">
                 <tr>
@@ -58,6 +58,26 @@
                             <option value="0">请选择</option>
                             <?php if(is_array($cats)): foreach($cats as $key=>$v): ?><option value="<?php echo ($v["cat_id"]); ?>" <?php if($data['cat_id'] == $v['cat_id']): ?>selected=selected<?php endif; ?> ><?php echo str_repeat('-',4*$v['level']); echo ($v["cat_name"]); ?></option><?php endforeach; endif; ?>
                         </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">扩展分类：<input type="button" id="e_cat_bt" value="添加扩展"/></td>
+                    <td>
+                        <ul id="e_cat_name">
+                            <?php if($gc_list): if(is_array($gc_list)): foreach($gc_list as $key=>$gc): ?><li style="float: left;list-style: none;margin:2px">
+                                <select  name="e_cat_id[]" >
+                                    <option value="0">请选择</option>
+                                    <?php if(is_array($cats)): foreach($cats as $key=>$v): ?><option value="<?php echo ($v["cat_id"]); ?>" <?php if($v['cat_id'] == $gc['cat_id']): ?>selected=selected<?php endif; ?> > <?php echo str_repeat('-',4*$v['level']);?> <?php echo ($v["cat_name"]); ?></option><?php endforeach; endif; ?>
+                                </select>
+                            </li><?php endforeach; endif; ?>
+                                <?php else: ?>
+                                <li style="float: left;list-style: none;margin:2px">
+                                    <select  name="e_cat_id[]" >
+                                        <option value="0">请选择</option>
+                                        <?php if(is_array($cats)): foreach($cats as $key=>$v): ?><option value="<?php echo ($v["cat_id"]); ?>"><?php echo str_repeat('-',4*$v['level']);?> <?php echo ($v["cat_name"]); ?></option><?php endforeach; endif; ?>
+                                    </select>
+                                </li><?php endif; ?>
+                        </ul>
                     </td>
                 </tr>
                 <tr>
@@ -162,6 +182,12 @@
                 }
             })
         }
+    })
+
+    $("#e_cat_bt").click(function () {
+        var i=$('#e_cat_name').find('li').eq(0).clone();
+        $(i).eq(0).find("option").eq(0).attr('selected','selected');
+        $('#e_cat_name').append(i);
     })
 </script>
 

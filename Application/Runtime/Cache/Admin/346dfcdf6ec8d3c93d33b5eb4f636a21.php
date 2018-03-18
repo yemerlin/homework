@@ -47,6 +47,19 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="label">扩展分类：<input type="button" id="e_cat_bt" value="添加扩展"/></td>
+                    <td>
+                        <ul id="e_cat_name">
+                            <li style="float: left;list-style: none;margin:2px">
+                                 <select  name="e_cat_id[]" >
+                                   <option value="0">请选择</option>
+                                     <?php if(is_array($cats)): foreach($cats as $key=>$v): ?><option value="<?php echo ($v["cat_id"]); ?>"><?php echo str_repeat('-',4*$v['level']); echo ($v["cat_name"]); ?></option><?php endforeach; endif; ?>
+                                 </select>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
                     <td class="label">品牌名称：</td>
                     <td>
                         <select  name="brand_id">
@@ -121,6 +134,10 @@
     $("#p_btn").click(function(){
         var file="<li><input type='file' name='pic[]'/></li>";
         $("#p_ul").append(file);
+    })
+
+    $("#e_cat_bt").click(function () {
+        $("#e_cat_name").append($("#e_cat_name").find("li").eq(0).clone());
     })
 </script>
 

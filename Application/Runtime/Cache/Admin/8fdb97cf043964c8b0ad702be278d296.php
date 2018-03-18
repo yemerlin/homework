@@ -37,6 +37,7 @@
                 <th>编号</th>
                 <th>商品名称</th>
                 <th>主分类</th>
+                <th>扩展分类</th>
                 <th>品牌</th>
                 <th>本店价格</th>
                 <th>市场价格</th>
@@ -55,6 +56,7 @@
                 <td align="center"><?php echo ($v["id"]); ?></td>
                 <td align="center" class="first-cell"><span><?php echo ($v["goods_name"]); ?></span></td>
                 <td align="center"><?php echo ($v["cat_name"]); ?></td>
+                <td align="center"><?php echo ($v["e_cat_name"]); ?></td>
                 <td align="center"><?php echo ($v["brand_name"]); ?></td>
                 <td align="center"><span onclick=""><?php echo ($v["shop_price"]); ?></span></td>
                 <td align="center"><span><?php echo ($v["market_price"]); ?></span></td>

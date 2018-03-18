@@ -20,8 +20,8 @@ class GoodsModel extends Model
         'gis_on_sale'   =>'is_on_sale',
         'g_desc'        =>'goods_desc'
     );
-    protected $insertFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale','brand_id','cat_id');
-    protected $updateFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale','brand_id','cat_id');
+    protected $insertFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale','brand_id','cat_id','e_cat_id');
+    protected $updateFields=array('goods_name','shop_price','market_price','goods_desc','is_on_sale','brand_id','cat_id','e_cat_id');
     protected $_validate=array(
         array('goods_name','require','商品名称必须填',1),
         array('shop_price','currency','本店价格必须是货币',1),
@@ -30,6 +30,7 @@ class GoodsModel extends Model
 
     protected function _before_insert(&$data,$option)
     {
+
         if($_FILES['logo']['error']==0){
             $upload=new Upload();
             $upload->maxSize=0;  //10M
@@ -71,6 +72,20 @@ class GoodsModel extends Model
     }
     protected function _after_insert($data,$option)
     {
+        //处理扩展分类
+        $e_cat_id=I('post.e_cat_id');
+        $gc_model=D('GoodsCat');
+        foreach ($e_cat_id as $v) {
+            if($v!=0) {
+                $gc_model->add(
+                    array(
+                        'goods_id' => $data['id'],
+                        'cat_id' => $v
+                    )
+                );
+            }
+        }
+
         $mb=I('post.member_price');    //处理会员价格
         $model=D('MemberPrice');
         foreach ($mb as $k=>$v){
@@ -133,6 +148,7 @@ class GoodsModel extends Model
     protected function _before_update(&$data,$option)
     {
 
+
         if($_FILES['logo']['error']==0) {  //是否上传新图片
             $oldlogo=$this->field('logo,s_logo,m_logo,l_logo,xl_logo')->find($data['id']);
             unlink('./Public/Uploads/'.$oldlogo['logo']);                                //删除旧图
@@ -182,7 +198,12 @@ class GoodsModel extends Model
 
     protected function _before_delete($option)
     {
+        //删除扩展分类
+
         $id=$option['where']['id'];
+        $gc_model=D('GoodsCat');
+        $gc_model->where("goods_id=$id")->delete();
+
         $oldlogo=$this->field('logo,s_logo,m_logo,l_logo,xl_logo')->find($id);
         unlink('./Public/Uploads/'.$oldlogo['logo']);
         unlink('./Public/Uploads/'.$oldlogo['s_logo']);
@@ -205,6 +226,21 @@ class GoodsModel extends Model
     }
     protected function _after_update($data,$option)
     {
+        //修改扩展分类
+        $id=$data['id'];
+        $gc_model=D('GoodsCat');
+        $gc_model->where("goods_id=$id")->delete();
+        $e_cat_id=I('post.e_cat_id');
+        foreach ($e_cat_id as $v){
+            if($v!=0){
+                $gc_model->add(
+                    array(
+                        'goods_id'  => $id,
+                        'cat_id'    =>$v
+                    )
+                );
+            }
+        }
         if($_FILES['pic']){
             $pics=array();
             $i=0;
@@ -279,7 +315,7 @@ class GoodsModel extends Model
 
         $page=new Page($count,5);
         $list['show']=$page->show();
-        $list['data']=$this->field('g.*,b.brand_name,c.cat_name')->alias('g')->join('left join ye_brands b on g.brand_id=b.brand_id left join ye_category c on g.cat_id=c.cat_id')->where($where)->limit($page->firstRow,$page->listRows)->select();
+        $list['data']=$this->field('g.*,b.brand_name,c.cat_name,group_concat(ec.cat_name separator "  <br>") e_cat_name')->alias('g')->join('left join ye_brands b on g.brand_id=b.brand_id left join ye_category c on g.cat_id=c.cat_id left join ye_goods_cat gc on g.id=gc.goods_id left join ye_category ec on gc.cat_id=ec.cat_id')->where($where)->limit($page->firstRow,$page->listRows)->group('g.id')->select();
         return $list;
     }
 
